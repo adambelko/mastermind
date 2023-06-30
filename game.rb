@@ -1,30 +1,34 @@
-require "./display"
+# frozen_string_literal: true
+
+require "./text_instructions"
+require "./code_breaker"
 
 class Game
-  include Display
+  include TextInstructions
 
   def play
     display_instructions
     game_mode = take_input
 
     code_maker if game_mode == "1"
-    code_braker if game_mode == "2"
+    code_breaker if game_mode == "2"
   end
 
   def take_input
     input = gets.chomp
     return input if %w[1 2].include?(input)
 
-    puts "Incorrect input"
+    puts "Incorrect input, try again"
     take_input
   end
 
   def code_maker
-    puts "Code maker"
+    puts "Code maker coming soon :)"
   end
 
-  def code_braker
-    puts "Code braker"
+  def code_breaker
+    breaker = CodeBreaker.new
+    breaker.start
   end
 end
 
