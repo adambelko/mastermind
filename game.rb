@@ -28,7 +28,7 @@ class Game
 
   def code_breaker
     breaker = CodeBreaker.new
-    breaker.start
+    breaker.start_game
   end
 end
 

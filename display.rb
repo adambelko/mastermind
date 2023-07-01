@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module Display
+  def green(string)
+    "\e[32m#{string}\e[0m"
+  end
+
   def red(string)
     "\e[31m#{string}\e[0m"
   end

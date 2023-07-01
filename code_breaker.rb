@@ -3,7 +3,7 @@ require "./text_content"
 require "./display"
 
 class CodeBreaker
-  attr_accessor :master_code, :user_guess, :counter
+  attr_accessor :master_code, :player_guess, :counter
 
   include GameLogic
   include TextContent
@@ -12,44 +12,54 @@ class CodeBreaker
   def initialize
     @master_code = create_master_code
     @counter = 1
-    puts "Master code is #{master_code}"
   end
 
-  def start
+  def start_game
     puts
-    puts turn_message("breaker_init")
-    puts turn_message("turn_number", counter)
+    puts message("breaker_init")
+    puts message("turn_number", counter)
 
-    @user_guess = take_input
-    compare(master_code, user_guess)
+    @player_guess = take_input
+    game_loop(master_code, player_guess)
   end
 
   private
 
-  def compare(master_code, user_guess)
-    puts
-    puts "Your guess is now:"
-    puts "#{display_code(user_guess)}  Clues: #{display_clues(master_code, user_guess)}"
-    puts
-    return puts "And you cracked the code!" if matched?(master_code, user_guess)
+  def game_loop(master_code, player_guess)
+    display_guess(master_code, player_guess)
+
+    return puts message("cracked_code") if matched?(master_code, player_guess)
 
     self.counter += 1
+    return puts message("game_over") if game_over?
+
     puts
-    puts "Keep trying!"
-    puts turn_message("turn_number", counter)
-    user_guess = take_input
-    compare(master_code, user_guess)
+    puts message("turn_info", counter)
+
+    player_guess = take_input
+    game_loop(master_code, player_guess)
   end
 
-  def matched?(master_code, user_guess)
-    master_code == user_guess
+  def display_guess(master_code, player_guess)
+    puts
+    puts "Your guess is:"
+    puts "#{display_code(player_guess)}  Clues: #{display_clues(master_code, player_guess)}"
+    puts
+  end
+
+  def game_over?
+    counter > 12
+  end
+
+  def matched?(master_code, player_guess)
+    master_code == player_guess
   end
 
   def take_input
     code = gets.chomp
     return convert_to_array(code) if valid_code?(code)
 
-    puts turn_message("incorrect_code")
+    puts message("invalid_code")
     take_input
   end
 
@@ -62,20 +72,20 @@ class CodeBreaker
     output
   end
 
-  def display_clues(master_code, user_guess)
+  def display_clues(master_code, player_guess)
     clues_arr = []
     matched_indexes = []
 
-    user_guess.each_with_index do |user_value, index|
+    player_guess.each_with_index do |player_value, index|
       master_value = master_code[index]
 
-      if master_value == user_value
+      if master_value == player_value
         clues_arr << clues["full_match"]
         matched_indexes << index
 
-      elsif master_code.include?(user_value) && !matched_indexes.include?(master_code.index(user_value))
+      elsif master_code.include?(player_value) && !matched_indexes.include?(master_code.index(player_value))
         clues_arr << clues["partial_match"]
-        matched_indexes << master_code.index(user_value)
+        matched_indexes << master_code.index(player_value)
       end
     end
 
