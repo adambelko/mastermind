@@ -2,6 +2,6 @@
 
 module GameLogic
   def create_master_code
-    Array.new(4).map { rand(1..6) }
+    Array.new(4).map { rand(1..6).to_s }
   end
 end
