@@ -12,12 +12,12 @@ module TextInstructions
     puts
     puts "There are six different number/color combinations:"
     puts
-    puts code_colors.values.join(" ")
+    puts code_colors.values.join("")
     puts
     puts
     puts "The code maker will choose four to create a 'master code'. For example,"
     puts
-    puts "#{code_colors["2"]} #{code_colors["2"]} #{code_colors["5"]} #{code_colors["1"]}"
+    puts "#{code_colors["2"]}#{code_colors["2"]}#{code_colors["5"]}#{code_colors["1"]}"
     puts
     puts "As you can see, there can be #{red("more then one")} of the same number/color."
     puts "In order to win, the code breaker needs to guess the 'master code' in 12 or less turns."
@@ -32,8 +32,8 @@ module TextInstructions
     puts underline("Clues Example:")
     puts 'To continue with the example, using the above "master code" a guess of "2541" would produce 3 clues:'
     puts
-    print "#{code_colors["2"]} #{code_colors["5"]} #{code_colors["4"]} #{code_colors["1"]} "
-    print "  #{clues["full_match"]} #{clues["full_match"]} #{clues["partial_match"]}\n"
+    print "#{code_colors["2"]}#{code_colors["5"]}#{code_colors["4"]}#{code_colors["1"]} "
+    print "Clues: #{clues["full_match"]} #{clues["full_match"]} #{clues["partial_match"]}\n"
     puts
     puts
     puts "There is 2 correct numbers in the correct location and 1 correct number in a wrong location."
