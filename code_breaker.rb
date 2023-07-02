@@ -17,7 +17,7 @@ class CodeBreaker
   def start_game
     puts
     puts message("breaker_init")
-    puts message("turn_number", counter)
+    puts message("turn_info", counter)
 
     @player_guess = take_input
     game_loop(master_code, player_guess)
@@ -89,7 +89,8 @@ class CodeBreaker
       end
     end
 
-    clues_arr.join(" ")
+    sorted_clues = clues_arr.sort_by { |clue| [clue == clues["full_match"] ? 0 : 1, clue.length] }
+    sorted_clues.join(" ")
   end
 
   def convert_to_array(code)
