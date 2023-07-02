@@ -1,11 +1,11 @@
-require "./game_logic"
+require "./game_methods"
 require "./text_content"
 require "./display"
 
 class CodeMaker
   attr_accessor :master_code, :computer_guess, :counter, :matched_indexes
 
-  include GameLogic
+  include GameMethods
   include TextContent
   include Display
 
@@ -18,28 +18,27 @@ class CodeMaker
     puts
     puts message("maker_init")
     @master_code = take_input
-    display_master_code(master_code)
+    puts message("master_code")
+    puts display_code(master_code)
     puts
     puts message("turn_info_computer", counter)
     game_loop
   end
 
+  private
+
   def game_loop
     @computer_guess = generate_guess
-    display_guess(computer_guess)
+    puts display_code(computer_guess)
 
     return puts "Computer cracked the code!" if matched?
 
     self.counter += 1
-    return puts message("game_over") if game_over?
+    return puts message("computer_lost") if game_over?
 
     puts
     puts message("turn_info_computer", counter)
     game_loop
-  end
-
-  def game_over?
-    counter > 12
   end
 
   def matched?
@@ -53,7 +52,7 @@ class CodeMaker
   end
 
   def generate_guess
-    return Array.new(4).map { rand(1..6).to_s } if counter == 1
+    return create_master_code if counter == 1
 
     partial_match?
 
@@ -67,38 +66,5 @@ class CodeMaker
     end
 
     guess
-  end
-
-  def display_master_code(master_code)
-    puts display_code(master_code)
-  end
-
-  def display_guess(computer_guess)
-    puts display_code(computer_guess)
-  end
-
-  def display_code(code)
-    output = ""
-    code.map do |element|
-      output << code_colors[element]
-    end
-
-    output
-  end
-
-  def take_input
-    code = gets.chomp
-    return convert_to_array(code) if valid_code?(code)
-
-    puts message("invalid_code")
-    take_input
-  end
-
-  def convert_to_array(code)
-    code.split("")
-  end
-
-  def valid_code?(code)
-    code.match?(/\A[1-6]{4}\z/)
   end
 end

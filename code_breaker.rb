@@ -1,11 +1,11 @@
-require "./game_logic"
+require "./game_methods"
 require "./text_content"
 require "./display"
 
 class CodeBreaker
   attr_accessor :master_code, :player_guess, :counter
 
-  include GameLogic
+  include GameMethods
   include TextContent
   include Display
 
@@ -28,7 +28,7 @@ class CodeBreaker
   def game_loop(master_code, player_guess)
     display_guess(master_code, player_guess)
 
-    return puts message("cracked_code") if matched?(master_code, player_guess)
+    return puts message("cracked_code") if matched?
 
     self.counter += 1
     return puts message("game_over") if game_over?
@@ -45,31 +45,6 @@ class CodeBreaker
     puts "Your guess is:"
     puts "#{display_code(player_guess)}  Clues: #{display_clues(master_code, player_guess)}"
     puts
-  end
-
-  def game_over?
-    counter > 12
-  end
-
-  def matched?(master_code, player_guess)
-    master_code == player_guess
-  end
-
-  def take_input
-    code = gets.chomp
-    return convert_to_array(code) if valid_code?(code)
-
-    puts message("invalid_code")
-    take_input
-  end
-
-  def display_code(code)
-    output = ""
-    code.map do |element|
-      output << code_colors[element]
-    end
-
-    output
   end
 
   def display_clues(master_code, player_guess)
@@ -93,11 +68,7 @@ class CodeBreaker
     sorted_clues.join(" ")
   end
 
-  def convert_to_array(code)
-    code.split("")
-  end
-
-  def valid_code?(code)
-    code.match?(/\A[1-6]{4}\z/)
+  def matched?
+    master_code == player_guess
   end
 end
